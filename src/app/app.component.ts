@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { io } from 'socket.io-client';
+import { SocketService } from './socket.service';
 
 @Component({
   selector: 'app-root',
@@ -7,21 +7,17 @@ import { io } from 'socket.io-client';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  constructor(private socketService: SocketService) { }
 
-  private socket: any;
-
-  constructor() {
-    this.socket = io('http://localhost:3000'); // Reemplaza la URL con la dirección de tu servidor Node.js
-    this.socket.on('connect', () => {
-      console.log('Conectado al servidor de sockets');
-    });
-
-    // Maneja los eventos de los sockets aquí
+  ngOnInit() {
+    this.socketService.connect();
   }
 
-  ngOnDestroy() {
-    this.socket.disconnect();
+  joinRoom(room: string) {
+    this.socketService.joinRoom(room);
   }
 
-  title = 'socket';
+  leaveRoom(room: string) {
+    this.socketService.leaveRoom(room);
+  }
 }
